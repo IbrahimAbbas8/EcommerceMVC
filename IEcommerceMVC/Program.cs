@@ -1,7 +1,15 @@
+using IEcommerceMVC.Data;
+using IEcommerceMVC.Data.DataBaseContexts;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<EcommerceDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration["ConnectionStrings:DefulteConnection"]);
+});
 
 var app = builder.Build();
 
@@ -22,6 +30,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Products}/{action=Index}/{id?}");
+AppDbInitializer.Seed(app);
 
 app.Run();
